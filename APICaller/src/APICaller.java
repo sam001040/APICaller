@@ -7,6 +7,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -104,7 +106,6 @@ public final class APICaller {
 
 	public static void vocabularyGET(final String queryWord, final int limit){	
 		try {
-					
 			String[]params = {"query", "limit", "apiKey"};
 			String[]values = {queryWord,Integer.toString(limit), API_KEY};
 			String query = queryBuilder(params, values);
@@ -112,11 +113,17 @@ public final class APICaller {
 			Map<String, Object> jsonMap = slurp(VOCABULARY_URL_PATH, query);
 			Map a = (Map) jsonMap.get("data");
 			
-			ArrayList <Object> obj = (ArrayList<Object>) a.get("items");
-				
-			System.out.println(Arrays.toString(obj.toArray()));		
-			System.out.println(obj.size());
-			    
+			ArrayList<Object> obj = (ArrayList<Object>) a.get("items");
+			HashMap <String, LinkedHashMap> items = new HashMap <String, LinkedHashMap>(); 
+			
+			
+			
+			for (Object item : obj){
+				items.put((String)((LinkedHashMap)item).get("code"), (LinkedHashMap) item);
+			}
+			
+//			Map sortedMap = ArrayTools.sortByValueTitle(items, false);
+//			System.out.println(sortedMap);				
 		} 
 		catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
