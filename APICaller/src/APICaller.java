@@ -14,7 +14,9 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class APICaller {
-		/*
+	
+	
+	/*
 	 * Which library should we use btw Apache HTTP Client & HttpURLConnection? 
 	 * - Seems like HttpULRConnection is the best choice for 
 	 * phones on Gingerbread and above & uses less memory 
@@ -23,9 +25,10 @@ public final class APICaller {
 	 * 
 	 * */
 	
-	/* Tutorial 
- * http://stackoverflow.com/questions/2793150/using-java-net-urlconnection-to-fire-and-handle-http-requests
- * */
+	/*
+	 * Tutorial 
+	 * http://stackoverflow.com/questions/2793150/using-java-net-urlconnection-to-fire-and-handle-http-requests
+	 * */
 
 	static final String VOCABULARY_URL_PATH = "http://imoweb.azurewebsites.net/vocabulary/procedure"; 
 	static final String CHARSET = java.nio.charset.StandardCharsets.UTF_8.name();
@@ -91,18 +94,17 @@ public final class APICaller {
 			Map<String, Object> jsonMap = mapper.readValue(response, Map.class);
 			
 			return jsonMap; 
-	}
-	 catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	 } 
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 		catch (IOException e) {
 		// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null; 
 	}
-
 
 	public static void vocabularyGET(final String queryWord, final int limit){	
 		try {
@@ -115,15 +117,13 @@ public final class APICaller {
 			
 			ArrayList<Object> obj = (ArrayList<Object>) a.get("items");
 			HashMap <String, LinkedHashMap> items = new HashMap <String, LinkedHashMap>(); 
-			
-			
-			
+						
 			for (Object item : obj){
-				items.put((String)((LinkedHashMap)item).get("code"), (LinkedHashMap) item);
+				items.put((String)((Map)item).get("code"), (LinkedHashMap) item);
 			}
 			
-//			Map sortedMap = ArrayTools.sortByValueTitle(items, false);
-//			System.out.println(sortedMap);				
+			Map sortedMap = ArrayTools.sortByCode(items, true);
+			System.out.println(Arrays.toString(sortedMap.entrySet().toArray()));				
 		} 
 		catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
